@@ -6,7 +6,10 @@ phases:
       java: openjdk8
   pre_build:
     commands:
-      - aws codebuild batch-get-builds --ids $CODEBUILD_BUILD_ID --query 'builds[].sourceVersion' --output text
+            #- aws codebuild batch-get-builds --ids $CODEBUILD_BUILD_ID --query 'builds[].sourceVersion' --output text
+      - BUILD_PROJECT=`echo $CODEBUILD_BUILD_ID | tr ":" " " | awk {'print $1'}`
+      - BRANCH=`aws codebuild batch-get-projects --names $BUILD_PROJECT --query projects[].sourceVersion --output text`
+      - echo $BRANCH
       - echo CODEBUILD_SOURCE_VERSION
       - echo $CODEBUILD_SOURCE_VERSION
       - echo env
